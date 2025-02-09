@@ -1,0 +1,18 @@
+[package]
+name = "neemo"
+version = "0.1.0"
+edition = "2021"
+authors = ["Samuel Aondo samuelaondojr@gmail.com"]
+description = "A lightweight NoSQL key-value database powered by sled."
+license = "MIT"
+repository = "https://github.com/sazalo101/neemo-db"
+homepage = "https://github.com/sazalo101/neemo-db"
+readme = "README.md"
+categories = ["database"]
+keywords = ["database", "nosql", "key-value", "rust"]
+
+[dependencies]
+sled = "0.34"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+dirs = "5.0"
