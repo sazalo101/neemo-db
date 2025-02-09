@@ -1,179 +1,85 @@
-# neemo-db
-# **Neemo** 🗄️
-A lightweight, fast, and embedded **document database** powered by **Sled**.  
-Neemo provides an easy-to-use **key-value** storage system for developers who need **persistent storage** without the complexity of a full database.
+# Neemo - Lightweight JSON Database
 
-## 🚀 **Features**
-✅ **Fast & Efficient**: Uses **Sled**, a high-performance embedded database.  
-✅ **Simple API**: Store, retrieve, and delete JSON-like documents.  
-✅ **Persistent Storage**: Data is stored on disk.  
-✅ **Cross-platform**: Works on **Linux, macOS, and Windows**.  
-✅ **Lightweight**: No external dependencies or extra database setup required.  
+Neemo is a lightweight, document-oriented database built with Rust and powered by `sled`. It allows users to store, query, and manage JSON-based documents efficiently. Neemo can be used both as a standalone CLI database and as a Rust crate.
 
----
+## Features
 
-## 🛠 **Installation**
-### **Install via Cargo**
+- **Document-based storage** using `sled`
+- **Indexing for fast queries**
+- **JSON-based document structure**
+- **CLI for interactive usage**
+- **Usable as a Rust library**
+
+## Installation
+
+To use Neemo as a Rust crate, add the following to your `Cargo.toml`:
+
+```toml
+[dependencies]
+neemo = "0.1.0"
+```
+
+To install Neemo as a CLI tool:
+
 ```sh
 cargo install neemo
 ```
 
-### **Build from Source**
-```sh
-git clone https://github.com/yourusername/neemo.git
-cd neemo
-cargo build --release
-```
+## Usage
 
-This will generate an executable at:
+### CLI Mode
 
-```
-target/release/neemo
-```
+Start Neemo by running:
 
-Move it to `/usr/local/bin/` for global use:
-
-```sh
-cp target/release/neemo /usr/local/bin/neemo
-```
-
----
-
-## 🚀 **Usage**
-### **Start the Neemo Server**
-Run Neemo as a local database server:
 ```sh
 neemo
 ```
 
-By default, Neemo stores data in:
-```
-$HOME/.neemo/db
-```
+You can then use the following commands:
 
-### **API Endpoints**
-Neemo provides a **JSON API** for interacting with the database.
+- `INSERT <key>` – Insert a new document
+- `GET <key>` – Retrieve a document by key
+- `DELETE <key>` – Remove a document
+- `QUERY <field> <value>` – Query documents by field-value pair
+- `LIST` – List all keys in the database
+- `EXIT` – Quit the CLI
 
-#### 📌 **Store Data (POST)**
+Example:
+
 ```sh
-curl -X POST http://localhost:5000/set -H "Content-Type: application/json" \
-     -d '{"key": "user:123", "value": {"name": "Alice", "age": 25}}'
+Neemo > INSERT user1
+Field: name=John Doe
+Field: age=30
+Field:
+Document 'user1' inserted successfully.
 ```
 
-#### 📌 **Retrieve Data (GET)**
-```sh
-curl http://localhost:5000/get/user:123
-```
-**Response:**
-```json
-{"name": "Alice", "age": 25}
+### Using as a Rust Library
+
+```rust
+use neemo::{Neemo, Document};
+use std::collections::HashMap;
+use serde_json::json;
+
+fn main() {
+    let db = Neemo::new("neemo_db");
+    let mut data = HashMap::new();
+    data.insert("name".to_string(), json!("John Doe"));
+    data.insert("age".to_string(), json!(30));
+
+    db.insert("user1", Document { data });
+    db.get("user1");
+}
 ```
 
-#### 📌 **Delete Data (DELETE)**
-```sh
-curl -X DELETE http://localhost:5000/delete/user:123
-```
+
+
+## License
+
+Neemo is released under the MIT License.
 
 ---
 
-# 🔗 **Using Neemo with Flask (Python)**
-You can interact with Neemo from **Flask** using `requests`:
-
-### **Install Dependencies**
-```sh
-pip install flask requests
-```
-
-### **Flask Example**
-```python
-from flask import Flask, request, jsonify
-import requests
-
-app = Flask(__name__)
-
-NEEMO_URL = "http://localhost:5000"
-
-@app.route('/store', methods=['POST'])
-def store():
-    data = request.json
-    res = requests.post(f"{NEEMO_URL}/set", json=data)
-    return res.json()
-
-@app.route('/get/<key>', methods=['GET'])
-def get(key):
-    res = requests.get(f"{NEEMO_URL}/get/{key}")
-    return res.json()
-
-@app.route('/delete/<key>', methods=['DELETE'])
-def delete(key):
-    res = requests.delete(f"{NEEMO_URL}/delete/{key}")
-    return res.json()
-
-if __name__ == "__main__":
-    app.run(port=8080)
-```
-
-Now, you can store and retrieve data via:
-```sh
-curl -X POST http://localhost:8080/store -H "Content-Type: application/json" \
-     -d '{"key": "product:101", "value": {"name": "Laptop", "price": 1200}}'
-
-curl http://localhost:8080/get/product:101
-```
-
----
-
-# 🔗 **Using Neemo with Node.js**
-You can interact with Neemo using `axios` in **Node.js**.
-
-### **Install Dependencies**
-```sh
-npm install axios express
-```
-
-### **Node.js Example**
-```javascript
-const express = require("express");
-const axios = require("axios");
-
-const app = express();
-const NEEMO_URL = "http://localhost:5000";
-
-app.use(express.json());
-
-app.post("/store", async (req, res) => {
-    const response = await axios.post(`${NEEMO_URL}/set`, req.body);
-    res.json(response.data);
-});
-
-app.get("/get/:key", async (req, res) => {
-    const response = await axios.get(`${NEEMO_URL}/get/${req.params.key}`);
-    res.json(response.data);
-});
-
-app.delete("/delete/:key", async (req, res) => {
-    const response = await axios.delete(`${NEEMO_URL}/delete/${req.params.key}`);
-    res.json(response.data);
-});
-
-app.listen(8080, () => console.log("Server running on port 8080"));
-```
-
-Now, you can interact with the database using:
-```sh
-curl -X POST http://localhost:8080/store -H "Content-Type: application/json" \
-     -d '{"key": "user:456", "value": {"name": "Bob", "age": 30}}'
-
-curl http://localhost:8080/get/user:456
-```
-
----
-
-## 📜 **License**
-This project is licensed under the **MIT License**.
-
----
-
-### **🎉 Now your database is ready to use in Python, Node.js, or any other language!** 🚀
-
+### Need Help?
+For questions, open an issue on GitHub: [https://github.com/sazalo101/neemo-db](https://github.com/sazalo101/neemo-db)
 

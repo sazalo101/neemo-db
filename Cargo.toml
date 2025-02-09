@@ -1,8 +1,8 @@
 [package]
 name = "neemo"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
-authors = ["Samuel Aondo samuelaondojr@gmail.com"]
+authors = ["Samuel Aondo "]
 description = "A lightweight NoSQL key-value database powered by sled."
 license = "MIT"
 repository = "https://github.com/sazalo101/neemo-db"
@@ -16,3 +16,4 @@ sled = "0.34"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 dirs = "5.0"
+
