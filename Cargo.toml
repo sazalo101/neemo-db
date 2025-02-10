@@ -1,9 +1,9 @@
 [package]
 name = "neemo"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
-authors = ["Samuel Aondo "]
-description = "A lightweight NoSQL key-value database powered by sled."
+authors = ["Samuel Aondo  "]
+description = "A lightweight NoSQL key-value database powered by sled. For queries send them to levidevi61@gmail.com"
 license = "MIT"
 repository = "https://github.com/sazalo101/neemo-db"
 homepage = "https://github.com/sazalo101/neemo-db"
