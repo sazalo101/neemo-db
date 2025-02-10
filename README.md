@@ -55,7 +55,7 @@ Document 'user1' inserted successfully.
 ```
 
 ### Using as a Rust Library
-
+### We are debugging this bear with us
 ```rust
 use neemo::{Neemo, Document};
 use std::collections::HashMap;
